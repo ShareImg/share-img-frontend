@@ -1,13 +1,19 @@
 <template>
   <div class="register-container">
     <form class="register-form" @submit="onClickRegister">
+      <div class="form-group image-form">
+        <div class="input-picture-container">
+          <label class="input-label">Choose Image</label>
+          <input class="input-picture" accept="image/*" type="file" @change="onInputDisplayImage"/>
+        </div>
+      </div>
       <div class="form-group">
         <label>Email</label>
         <input class="form-control" type="email" v-model="email"/>
       </div>
       <div class="form-group">
         <label>Display name</label>
-        <input class="form-control" type="email" v-model="username"/>
+        <input class="form-control" v-model="username"/>
       </div>
       <div class="form-group">
         <label>Password</label>
@@ -27,6 +33,7 @@ export default {
       email: '',
       password: '',
       username: '',
+      displayImage: null,
     }
   },
   methods: {
@@ -34,6 +41,12 @@ export default {
       await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch((error) => {
         console.log(error)
       })
+    },
+    onInputDisplayImage(e) {
+      const files = e.target.files || e.dataTransfer.files;
+      console.log(files);
+      if (!files.length)
+        return;
     }
   }
 }
@@ -48,5 +61,31 @@ export default {
   }
   .register-form {
     width: 70%;
+  }
+  .image-form {
+    display: flex;
+    justify-content: center;
+  }
+  .input-picture-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: 0.5px solid lightgray;
+    border-radius: 200px;
+    overflow: hidden;
+    margin-bottom : 1rem;
+  }
+  .input-label {
+    position: absolute;
+    text-align: center;
+    color: lightgray
+  }
+  .input-picture {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
   }
 </style>

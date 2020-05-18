@@ -34,6 +34,8 @@ export default {
   },
   methods: {
     checkPath(path) {
+      console.log(path);
+      
       if(path == '/login' || path == '/register') {
         this.showNav = false;
       } else {
