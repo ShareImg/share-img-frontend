@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Feed</p>
+    <PhotoBox />
     <PhotoBox />
   </div>
 </template>

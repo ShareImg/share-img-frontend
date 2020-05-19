@@ -25,29 +25,29 @@ export default {
   },
   watch: {
     $route(to) {
-      this.checkPath(to.path);
+      this.showNav = this.checkPath(to.path);
     }
   },
   created() {
-    this.checkPath(this.$route.path)
+    this.showNav = this.checkPath(this.$route.path)
     this.checkUserState()
   },
   methods: {
-    checkPath(path) {
-      console.log(path);
-      
+    checkPath(path) {      
       if(path == '/login' || path == '/register') {
-        this.showNav = false;
+        return false
       } else {
-        this.showNav = true;
+        return true;
       }
     },
     checkUserState() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           this.user = user;
+          if(!this.checkPath(this.$route.path)) this.$router.push('/')
         // ...
         } else {
+          if(this.checkPath(this.$route.path)) this.$router.push('/login')
           this.user = null;
         }
       });
@@ -62,9 +62,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  background-color: whitesmoke;
 }
 .content {
   padding: 2rem 20vw;
-  height: calc(100vh - 60px);
 }
 </style>

@@ -1,19 +1,14 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <router-link class="navbar-brand" to="/">ShareImg</router-link>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
+        <ProfileImage size="35px"/>
         <li class="nav-item">
-          <router-link class="nav-link" to="/login">Login</router-link>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
+          <div class="nav-link sign-out" @click="onClickSignOut">Sign out</div>
         </li>
       </ul>
     </div>
@@ -22,50 +17,12 @@
 
 <script>
 import _ from 'lodash';
+import firebase from '../config/firebase'
+import ProfileImage from './ProfileImage.vue'
 
 export default {
-  props: {
-    withBorder: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      currentActiveMenu: 'home',
-      menus: [
-        {
-          name: 'หน้าแรก',
-          key: 'home',
-          path: '/',
-          isHeading: false,
-        },
-        {
-          name: 'คอนเทนท์',
-          key: 'content',
-          path: '/contents',
-          isHeading: false,
-        },
-        {
-          name: 'วีดีโอ',
-          key: 'video',
-          path: '/videos',
-          isHeading: false,
-        },
-        {
-          name: 'Homepage Slider',
-          key: 'homepage-slider',
-          path: '/homepage-slider',
-          isHeading: false,
-        },
-        {
-          name: 'ตั้งค่า',
-          key: 'setting',
-          path: '/settings',
-          isHeading: false,
-        },
-      ],
-    };
+  components: {
+    ProfileImage,
   },
   computed: {
     showNavMenu() {
@@ -85,7 +42,8 @@ export default {
     changeTab(key) {
       this.$emit('input', key);
     },
-    gotoMenu() {
+    onClickSignOut() {
+      firebase.auth().signOut();
     },
   },
 };
@@ -94,5 +52,14 @@ export default {
 <style lang="css" scoped>
   .navbar {
     height: 60px;
+  }
+  .navbar-nav {
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .sign-out:hover {
+    cursor: pointer;
+    color: crimson !important;
   }
 </style>

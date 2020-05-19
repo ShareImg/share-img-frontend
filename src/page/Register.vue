@@ -44,7 +44,6 @@ export default {
     },
     onInputDisplayImage(e) {
       const files = e.target.files || e.dataTransfer.files;
-      console.log(files);
       if (!files.length)
         return;
     }
@@ -54,7 +53,7 @@ export default {
 
 <style scoped>
   .register-container {
-    height: 100%;
+    height: calc(100vh - 60px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,6 +76,7 @@ export default {
     border-radius: 200px;
     overflow: hidden;
     margin-bottom : 1rem;
+    background: white;
   }
   .input-label {
     position: absolute;
@@ -84,6 +84,7 @@ export default {
     color: lightgray
   }
   .input-picture {
+    cursor: pointer;
     width: 100%;
     height: 100%;
     opacity: 0;

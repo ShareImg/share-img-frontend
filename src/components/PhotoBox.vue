@@ -1,27 +1,35 @@
 <template>
   <div class="photo-box">
-    <img class="photo" src="../assets/output.jpg">
-    <div class="text-container">
-      <div class="user-information">
-        <div class="profile-image-container">
-          <img src="../assets/Mark.jpg" class="profile-image">
+    <div class="content-wrapper">
+      <img class="photo" src="../assets/output.jpg">
+      <div class="text-container">
+        <div class="user-information">
+          <ProfileImage />
+          <p class="display-name">Mark</p>
         </div>
-        <p class="display-name">Mark</p>
+        <p class="description mb-0">Example image</p>
       </div>
-      <p class="description">Example image</p>
     </div>
   </div>
 </template>
 
 <script>
+import ProfileImage from './ProfileImage.vue'
+
 export default {
-  
+  components: {
+    ProfileImage,
+  }
 }
 </script>
 
 <style scoped>
 .photo-box {
   padding: 0 15vw;
+  margin-bottom: 1rem;
+}
+.content-wrapper {
+  border: 1px solid rgb(233, 232, 232);
 }
 .photo {
   width: 100%;
@@ -31,21 +39,12 @@ export default {
   align-items: center;
   margin-top: 0.5rem;
   margin-bottom: 0.75rem;
-}
-.profile-image-container {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 50px;
-  margin-right: 0.5rem;
-}
-.profile-image {
-  width: 100%;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgb(233, 232, 232);
 }
 .text-container {
-  margin-top: 1rem;
+  padding: 1rem;
+  background-color: white;
 }
 .display-name {
   font-weight: bold;
