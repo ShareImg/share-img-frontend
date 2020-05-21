@@ -4,10 +4,15 @@ import VueRouter from 'vue-router';
 import Login from '../page/Login.vue'
 import Register from '../page/Register.vue'
 import Feed from '../page/Feed.vue'
+import Profile from '../page/Profile.vue'
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: '/',
+    component: Feed,
+  },
   {
     path: '/login',
     component: Login,
@@ -17,9 +22,9 @@ const routes = [
     component: Register,
   },
   {
-    path: '/',
-    component: Feed,
-  },
+    path: '/profile',
+    component: Profile
+  }
 ]
 
 const router = new VueRouter({

@@ -65,6 +65,7 @@ export default {
   background-color: whitesmoke;
 }
 .content {
-  padding: 2rem 20vw;
+  padding: 2rem 20vw 0 20vw;
+  min-height: calc(100vh - 60px);
 }
 </style>
