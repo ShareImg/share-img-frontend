@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <NavBar v-if="showNav"/>
+  <div id="app" v-if="user">
+    <NavBar v-if="showNav" :user="user"/>
     <div class="content">
       <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
       <router-view class="router-container" :user="user"/>
@@ -49,6 +49,8 @@ export default {
       firebase.auth().onAuthStateChanged(async(user) => {
         if (user) {
           await this.loadUserByUid(user.uid)
+          console.log('in');
+          
           if(!this.checkPath(this.$route.path)) this.$router.push('/')
         // ...
         } else {

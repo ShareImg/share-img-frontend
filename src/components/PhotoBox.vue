@@ -4,12 +4,14 @@
       <img class="photo" :src="photo.url">
       <div class="text-container">
         <div class="user-information information-box">
-          <ProfileImage />
+          <div @click="goToProfile()">
+            <ProfileImage :image="user.displayImage"/>
+          </div>
           <p class="display-name" @click="goToProfile()">{{photo.ownerName}}</p>
         </div>
         <div class="information-box">
           <p class="description mb-0">{{photo.description}}</p>
-          <ion-icon class="edit-button" name="pencil-outline" v-if="userId" @click="onClickEdit(index)"/>
+          <ion-icon class="edit-button" name="pencil-outline" v-if="user.id === photo.ownerId" @click="onClickEdit(index)"/>
         </div>
       </div>
     </div>
@@ -20,13 +22,13 @@
 import ProfileImage from './ProfileImage.vue'
 
 export default {
-  props:['photo', 'userId', 'onClickEdit', 'index'],
+  props:['photo', 'user', 'onClickEdit', 'index'],
   components: {
     ProfileImage,
   },
   methods: {
     goToProfile() {
-      this.$router.push(`/profile/${this.photo.ownerId}`)
+      this.$router.push(`/profile/${this.userId}`)
     },
   }
 }

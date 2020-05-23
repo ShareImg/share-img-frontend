@@ -3,7 +3,7 @@
     <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="user"/>
     <div>
       <div class="profile-header">
-        <ProfileImage size="200px"/>
+        <ProfileImage size="200px" :image="user.displayImage"/>
         <div class="button-container">
           <div class="add circle-button mr-4" @click="handleModal">
             <ion-icon name="add-outline" size="large"/>
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="profile-content">
-        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :userId="user.id" :onClickEdit="handleEdit" :index="index"/>
+        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index"/>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="main-feed" v-if="user">
-    <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :userId="user.id" :onClickEdit="handleEdit" :index="index"/>
+    <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index"/>
     <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="user"/>
   </div>
 </template>

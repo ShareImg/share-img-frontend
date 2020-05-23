@@ -68,6 +68,7 @@ export default {
     },
     async onClickSubmit() {
       if (this.isEdit) {
+        if (!this.value.ownerId !== this.user.id) this.onClose();
         const body = {
           ...this.value,
           description: this.description

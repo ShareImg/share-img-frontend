@@ -1,6 +1,9 @@
 <template>
   <div class="profile-image-container" :style="{ width: size, height: size, 'border-radius': size}">
-    <img src="../assets/Mark.jpg" class="profile-image">
+    <div v-if="image">
+      <img :src="image" class="profile-image" />
+    </div>
+    <img src="https://cdn.onlinewebfonts.com/svg/img_568656.png" class="profile-image" v-else/>
   </div>
 </template>
 
@@ -11,6 +14,10 @@ export default {
       type: String,
       default: '50px',
     },
+    image: {
+      type: String,
+      default: null
+    }
   }
 }
 </script>
@@ -21,6 +28,7 @@ export default {
   align-items: center;
   overflow: hidden;
   margin-right: 0.5rem;
+  cursor: pointer;
 }
 .profile-image {
   width: 100%;
