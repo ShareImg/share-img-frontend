@@ -11,6 +11,7 @@
 <script>
 import NavBar from './components/NavBar.vue'
 import firebase from 'firebase'
+import { getUser } from './api'
 
 export default {
   name: 'App',
@@ -40,11 +41,14 @@ export default {
         return true;
       }
     },
+    async loadUserByUid(uid) {
+      const response = await getUser(uid);
+      this.user = response.data;
+    },
     checkUserState() {
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(async(user) => {
         if (user) {
-          console.log(user)
-          this.user = user;
+          await this.loadUserByUid(user.uid)
           if(!this.checkPath(this.$route.path)) this.$router.push('/')
         // ...
         } else {

@@ -3,11 +3,14 @@
     <div class="content-wrapper">
       <img class="photo" :src="photo.url">
       <div class="text-container">
-        <div class="user-information">
+        <div class="user-information information-box">
           <ProfileImage />
           <p class="display-name" @click="goToProfile()">{{photo.ownerName}}</p>
         </div>
-        <p class="description mb-0">{{photo.description}}</p>
+        <div class="information-box">
+          <p class="description mb-0">{{photo.description}}</p>
+          <ion-icon class="edit-button" name="pencil-outline" v-if="userId" @click="onClickEdit(index)"/>
+        </div>
       </div>
     </div>
   </div>
@@ -17,36 +20,43 @@
 import ProfileImage from './ProfileImage.vue'
 
 export default {
-  props:['photo'],
+  props:['photo', 'userId', 'onClickEdit', 'index'],
   components: {
     ProfileImage,
   },
   methods: {
     goToProfile() {
       this.$router.push(`/profile/${this.photo.ownerId}`)
-    }
+    },
   }
 }
 </script>
 
 <style scoped>
 .photo-box {
-  padding: 0 15vw;
+  /* padding: 0 15vw; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 1rem;
 }
 .content-wrapper {
   border: 1px solid rgb(233, 232, 232);
+  max-width: 600px;
+  min-width: 400px;
 }
 .photo {
   width: 100%;
 }
 .user-information {
-  display: flex;
-  align-items: center;
   margin-top: 0.5rem;
   margin-bottom: 0.75rem;
   padding-bottom: 0.75rem;
   border-bottom: 1px solid rgb(233, 232, 232);
+}
+.information-box {
+  display: flex;
+  align-items: center;
 }
 .text-container {
   padding: 1rem;
@@ -59,5 +69,9 @@ export default {
 .display-name:hover {
   cursor: pointer;
   text-decoration: underline;
+}
+.edit-button {
+  margin-left: auto;
+  cursor: pointer;
 }
 </style>

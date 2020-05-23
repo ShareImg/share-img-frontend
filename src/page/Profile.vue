@@ -1,6 +1,6 @@
 <template>
-  <div class="profile-page" :class="{ 'overflow-hidden': true}">
-    <PhotoEditingModal :onClose="handleModal" v-if="modal"/>
+  <div class="profile-page" v-if="user">
+    <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="user"/>
     <div>
       <div class="profile-header">
         <ProfileImage size="200px"/>
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="profile-content">
-        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" />
+        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :userId="user.id" :onClickEdit="handleEdit" :index="index"/>
       </div>
     </div>
   </div>
@@ -29,31 +29,34 @@ import PhotoEditingModal from '../components/PhotoEditingModal'
 import {getPhotoByUserId} from '../api'
 
 export default {
+  props: ['user'],
   data() {
     return {
       modal: false,
-      photos: null
+      photos: null,
+      editIndex: null,
     }
   },
   components: {
     ProfileImage,
     PhotoBox,
-    PhotoEditingModal
+    PhotoEditingModal,
   },
   created() {
     this.loadPhotos();
   },
   methods: {
     handleModal(){
-      this.modal = !this.modal;
-      console.log(this.modal);
-      
+      this.modal = !this.modal;      
     },
     async loadPhotos() {
       const response = await getPhotoByUserId(this.$route.params.id);
       this.photos = response.data;
-      console.log(this.photos)
-    }
+    },
+    handleEdit(index) {
+      this.editIndex = index;
+      this.handleModal();
+    },
   }
 }
 </script>
@@ -80,6 +83,9 @@ export default {
     height: 125px;
     border-radius: 100px;
     border: 1px solid lightgray;
+  }
+  .circle-button:hover {
+    cursor: pointer;
   }
   .button-text {
     margin-top: 0.25rem;

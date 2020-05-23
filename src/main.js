@@ -4,6 +4,7 @@ import router from './router';
 
 
 Vue.config.productionTip = false
+Vue.config.ignoredElements = [/^ion-/]
 
 new Vue({
   router,
