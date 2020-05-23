@@ -3,7 +3,7 @@
     <NavBar v-if="showNav"/>
     <div class="content">
       <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-      <router-view class="router-container" />
+      <router-view class="router-container" :user="user"/>
     </div>
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
     checkUserState() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+          console.log(user)
           this.user = user;
           if(!this.checkPath(this.$route.path)) this.$router.push('/')
         // ...

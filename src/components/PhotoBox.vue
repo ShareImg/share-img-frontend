@@ -1,13 +1,13 @@
 <template>
   <div class="photo-box">
     <div class="content-wrapper">
-      <img class="photo" src="../assets/output.jpg">
+      <img class="photo" :src="photo.url">
       <div class="text-container">
         <div class="user-information">
           <ProfileImage />
-          <p class="display-name">Mark</p>
+          <p class="display-name" @click="goToProfile()">{{photo.ownerName}}</p>
         </div>
-        <p class="description mb-0">Example image</p>
+        <p class="description mb-0">{{photo.description}}</p>
       </div>
     </div>
   </div>
@@ -17,8 +17,14 @@
 import ProfileImage from './ProfileImage.vue'
 
 export default {
+  props:['photo'],
   components: {
     ProfileImage,
+  },
+  methods: {
+    goToProfile() {
+      this.$router.push(`/profile/${this.photo.ownerId}`)
+    }
   }
 }
 </script>
@@ -49,5 +55,9 @@ export default {
 .display-name {
   font-weight: bold;
   margin: 0;
+}
+.display-name:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>

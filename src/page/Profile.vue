@@ -16,8 +16,7 @@
         </div>
       </div>
       <div class="profile-content">
-        <PhotoBox />
-        <PhotoBox />
+        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" />
       </div>
     </div>
   </div>
@@ -27,11 +26,13 @@
 import ProfileImage from '../components/ProfileImage'
 import PhotoBox from '../components/PhotoBox';
 import PhotoEditingModal from '../components/PhotoEditingModal'
+import {getPhotoByUserId} from '../api'
 
 export default {
   data() {
     return {
       modal: false,
+      photos: null
     }
   },
   components: {
@@ -39,9 +40,19 @@ export default {
     PhotoBox,
     PhotoEditingModal
   },
+  created() {
+    this.loadPhotos();
+  },
   methods: {
     handleModal(){
       this.modal = !this.modal;
+      console.log(this.modal);
+      
+    },
+    async loadPhotos() {
+      const response = await getPhotoByUserId(this.$route.params.id);
+      this.photos = response.data;
+      console.log(this.photos)
     }
   }
 }

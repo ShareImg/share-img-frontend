@@ -1,6 +1,6 @@
 <template>
   <div class="register-container">
-    <form class="register-form" @submit="onClickRegister">
+    <form class="register-form" @submit.prevent="onClickRegister">
       <div class="form-group image-form">
         <div class="input-picture-container">
           <label class="input-label">Choose Image</label>
@@ -13,34 +13,46 @@
       </div>
       <div class="form-group">
         <label>Display name</label>
-        <input class="form-control" v-model="username"/>
+        <input class="form-control" v-model="displayName"/>
       </div>
       <div class="form-group">
         <label>Password</label>
         <input class="form-control" type="password" v-model="password" />
       </div>
-      <button class="btn btn-primary" type="button" @click="onClickRegister">Register</button>
+      <button class="btn btn-primary" type="submit">Register</button>
     </form>
   </div>
 </template>
 
 <script>
 import firebase from '../config/firebase'
+import {register} from '../api';
 
 export default {
   data() {
     return {
       email: '',
       password: '',
-      username: '',
+      displayName: '',
       displayImage: null,
     }
   },
   methods: {
     async onClickRegister() {
-      await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch((error) => {
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        const body = {
+          email: this.email,
+          password: this.password,
+          displayName: this.displayName,
+          displayImage: this.displayImage,
+          uid: firebase.auth().currentUser.uid
+        }
+        await register(body);
+        await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      } catch(error) {
         console.log(error)
-      })
+      }
     },
     onInputDisplayImage(e) {
       const files = e.target.files || e.dataTransfer.files;
