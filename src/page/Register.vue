@@ -50,6 +50,7 @@ export default {
         }
         await register(body);
         await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+        this.$router.go()
       } catch(error) {
         console.log(error)
       }

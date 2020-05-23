@@ -68,9 +68,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   background-color: whitesmoke;
+  min-height: 100vh;
 }
 .content {
-  padding: 2rem 20vw 0 20vw;
+  padding: 2rem 20vw 2rem 20vw;
   min-height: calc(100vh - 60px);
 }
 </style>
