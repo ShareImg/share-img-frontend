@@ -4,8 +4,8 @@ const register = (body) => {
   return axios.post('/user/register', body)
 }
 
-const getUser = (uid) => {
-  return axios.get(`/user/${uid}`)
+const getUser = (id) => {
+  return axios.get(`/user/${id}`)
 }
 
 //Photo api

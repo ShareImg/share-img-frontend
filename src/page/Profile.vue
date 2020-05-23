@@ -16,7 +16,10 @@
         </div>
       </div>
       <div class="profile-content">
-        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index"/>
+        <div class="empty-state" v-if="!photos || photos.length === 0">
+          <h4>You didn't have photo</h4>
+        </div>
+        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index" v-else/>
       </div>
     </div>
   </div>
@@ -93,4 +96,12 @@ export default {
   .profile-content {
     margin-top: 3rem;
   }
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+  color: gray;
+}
 </style>

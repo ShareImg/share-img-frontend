@@ -5,9 +5,9 @@
       <div class="text-container">
         <div class="user-information information-box">
           <div @click="goToProfile()">
-            <ProfileImage :image="user.displayImage"/>
+            <ProfileImage :image="photo.displayImage"/>
           </div>
-          <p class="display-name" @click="goToProfile()">{{photo.ownerName}}</p>
+          <p class="display-name" @click="goToProfile()">{{photo.displayName}}</p>
         </div>
         <div class="information-box">
           <p class="description mb-0">{{photo.description}}</p>
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     goToProfile() {
-      this.$router.push(`/profile/${this.userId}`)
+      this.$router.push(`/profile/${this.photo.ownerId}`)
     },
   }
 }

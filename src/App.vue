@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="user">
+  <div id="app">
     <NavBar v-if="showNav" :user="user"/>
     <div class="content">
       <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
@@ -41,16 +41,14 @@ export default {
         return true;
       }
     },
-    async loadUserByUid(uid) {
-      const response = await getUser(uid);
+    async loadUserById(id) {
+      const response = await getUser(id);
       this.user = response.data;
     },
     checkUserState() {
       firebase.auth().onAuthStateChanged(async(user) => {
-        if (user) {
-          await this.loadUserByUid(user.uid)
-          console.log('in');
-          
+        if (user) {    
+          await this.loadUserById(user.uid)     
           if(!this.checkPath(this.$route.path)) this.$router.push('/')
         // ...
         } else {
