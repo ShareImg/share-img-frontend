@@ -45,7 +45,7 @@ export default {
     // changeTab(key) {
     //   this.$emit('input', key);
     // },
-    goToProfile() {
+    goToProfile() {      
       this.$router.push(`/profile/${this.user.id}`)
     },
     onClickSignOut() {

@@ -1,9 +1,10 @@
 <template>
-  <div class="profile-page" v-if="user">
-    <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="user"/>
+  <div class="profile-page" v-if="owner">
+    <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="owner"/>
     <div>
       <div class="profile-header">
-        <ProfileImage size="200px" :image="user.displayImage"/>
+        <ProfileImage size="175px" :image="owner.displayImage"/>
+        <h4 class="mt-4">{{owner.displayName}}</h4>
         <div class="button-container">
           <div class="add circle-button mr-4" @click="handleModal">
             <ion-icon name="add-outline" size="large"/>
@@ -16,11 +17,15 @@
         </div>
       </div>
       <div class="profile-content">
-        <div class="empty-state" v-if="!photos || photos.length === 0">
-          <h4>You didn't have photo</h4>
+        <div class="spinner-grow text-secondary" style="width: 10rem; height: 10rem;" role="status" v-if="isLoading"/>
+        <div class="conetent-wrapper" v-else>
+          <div class="empty-state" v-if="!photos || photos.length === 0">
+            <h4>You didn't have photo</h4>
+          </div>
+          <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="owner" :onClickEdit="handleEdit" :index="index" v-else/>
         </div>
-        <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index" v-else/>
       </div>
+
     </div>
   </div>
 </template>
@@ -29,15 +34,16 @@
 import ProfileImage from '../components/ProfileImage'
 import PhotoBox from '../components/PhotoBox';
 import PhotoEditingModal from '../components/PhotoEditingModal'
-import {getPhotoByUserId} from '../api'
+import {getPhotoByUserId, getUser} from '../api'
 
 export default {
-  props: ['user'],
   data() {
     return {
       modal: false,
       photos: null,
       editIndex: null,
+      owner: null,
+      isLoading: false,
     }
   },
   components: {
@@ -46,15 +52,31 @@ export default {
     PhotoEditingModal,
   },
   created() {
-    this.loadPhotos();
+    this.load()
+  },
+  watch: {
+    $route() {
+      this.load()
+    }
   },
   methods: {
     handleModal(){
       this.modal = !this.modal;      
     },
+    async getUserById() {
+      const response = await getUser(this.$route.params.id)
+      this.owner = response.data;
+    },
     async loadPhotos() {
       const response = await getPhotoByUserId(this.$route.params.id);
       this.photos = response.data;
+    },
+    async load() {
+      this.isLoading = true;
+      this.owner = null;
+      await this.getUserById();
+      await this.loadPhotos();
+      this.isLoading = false;
     },
     handleEdit(index) {
       this.editIndex = index;
@@ -95,11 +117,14 @@ export default {
   }
   .profile-content {
     margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 
 .empty-state {
   display: flex;
-  justify-content: center;
   align-items: center;
   height: 20vh;
   color: gray;

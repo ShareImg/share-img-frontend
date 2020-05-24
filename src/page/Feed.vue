@@ -1,7 +1,10 @@
 <template>
-  <div class="main-feed" v-if="user">
-    <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index"/>
-    <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="user"/>
+  <div class="main-feed-wrapper">
+    <div class="main-feed" v-if="user">
+      <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index"/>
+      <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="user"/>
+    </div>
+    <div class="spinner-grow text-secondary" style="width: 10rem; height: 10rem;" role="status" v-else/>
   </div>
 </template>
 
@@ -36,7 +39,7 @@ export default {
       this.handleModal();
     },
     async getPhotos() {
-      try {        
+      try {
         const response = await getAllPhoto();
         this.photos = response.data;
       } catch (error) {
@@ -48,5 +51,9 @@ export default {
 </script>
 
 <style scoped>
-
+.main-feed-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>
