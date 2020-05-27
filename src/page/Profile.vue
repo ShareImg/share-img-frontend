@@ -1,16 +1,16 @@
 <template>
-  <div class="profile-page" v-if="owner">
+  <div class="profile-page" v-if="owner && user">
     <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="owner"/>
     <div>
       <div class="profile-header">
         <ProfileImage size="175px" :image="owner.displayImage"/>
         <h4 class="mt-4">{{owner.displayName}}</h4>
         <div class="button-container">
-          <div class="add circle-button mr-4" @click="handleModal">
+          <div class="add circle-button mr-4" @click="handleModal" v-if="isOwner">
             <ion-icon name="add-outline" size="large"/>
             <div class="button-text">Add photo</div>
           </div>
-          <div class="edit circle-button">
+          <div class="edit circle-button" v-if="isOwner">
             <ion-icon name="pencil-outline" size="large"></ion-icon>
             <div class="button-text">Edit profile</div>
           </div>
@@ -18,11 +18,11 @@
       </div>
       <div class="profile-content">
         <div class="spinner-grow text-secondary" style="width: 10rem; height: 10rem;" role="status" v-if="isLoading"/>
-        <div class="conetent-wrapper" v-else>
+        <div class="conetent-wrapper" v-if="!isLoading && user">
           <div class="empty-state" v-if="!photos || photos.length === 0">
             <h4>You didn't have photo</h4>
           </div>
-          <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="owner" :onClickEdit="handleEdit" :index="index" v-else/>
+          <PhotoBox v-for="(photo, index) in photos" :key="index" :photo="photos[index]" :user="user" :onClickEdit="handleEdit" :index="index"/>
         </div>
       </div>
 
@@ -37,6 +37,7 @@ import PhotoEditingModal from '../components/PhotoEditingModal'
 import {getPhotoByUserId, getUser} from '../api'
 
 export default {
+  props:['user'],
   data() {
     return {
       modal: false,
@@ -57,6 +58,14 @@ export default {
   watch: {
     $route() {
       this.load()
+    }
+  },
+  computed: {
+    isOwner() {
+      if (this.$route.params.id == this.user.id) {
+        return true;
+      }
+      return false
     }
   },
   methods: {
