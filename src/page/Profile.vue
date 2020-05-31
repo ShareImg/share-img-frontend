@@ -1,12 +1,12 @@
 <template>
   <div class="profile-page" v-if="owner && user">
-    <PhotoEditingModal :onClose="handleModal" v-if="modal" v-model="photos[editIndex]" :user="owner"/>
+    <PhotoEditingModal :onClose="onCloseModal" v-if="modal" v-model="photos[editIndex]" :user="owner"/>
     <div>
       <div class="profile-header">
         <ProfileImage size="175px" :image="owner.displayImage"/>
         <h4 class="mt-4">{{owner.displayName}}</h4>
         <div class="button-container">
-          <div class="add circle-button mr-4" @click="handleModal" v-if="isOwner">
+          <div class="add circle-button mr-4" @click="openModal" v-if="isOwner">
             <ion-icon name="add-outline" size="large"/>
             <div class="button-text">Add photo</div>
           </div>
@@ -69,8 +69,12 @@ export default {
     }
   },
   methods: {
-    handleModal(){
-      this.modal = !this.modal;      
+    openModal(){
+      this.modal = true;      
+    },
+    onCloseModal() {
+      this.modal = false;
+      this.editIndex = null;
     },
     async getUserById() {
       const response = await getUser(this.$route.params.id)
@@ -89,7 +93,7 @@ export default {
     },
     handleEdit(index) {
       this.editIndex = index;
-      this.handleModal();
+      this.openModal();
     },
     onClickEditProfile() {
       this.$router.push(`/edit/${this.user.id}`)
