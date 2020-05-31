@@ -10,7 +10,7 @@
             <ion-icon name="add-outline" size="large"/>
             <div class="button-text">Add photo</div>
           </div>
-          <div class="edit circle-button" v-if="isOwner">
+          <div class="edit circle-button" v-if="isOwner" @click="onClickEditProfile">
             <ion-icon name="pencil-outline" size="large"></ion-icon>
             <div class="button-text">Edit profile</div>
           </div>
@@ -71,7 +71,6 @@ export default {
   methods: {
     handleModal(){
       this.modal = !this.modal;      
-      console.log(this.modal);
     },
     async getUserById() {
       const response = await getUser(this.$route.params.id)
@@ -92,6 +91,9 @@ export default {
       this.editIndex = index;
       this.handleModal();
     },
+    onClickEditProfile() {
+      this.$router.push(`/edit/${this.user.id}`)
+    }
   }
 }
 </script>

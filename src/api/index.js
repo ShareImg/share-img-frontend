@@ -8,6 +8,10 @@ const getUser = (id) => {
   return axios.get(`/user/${id}`)
 }
 
+const editUser = (id, body) => {
+  return axios.put(`/user/edit/${id}`, body)
+}
+
 //Photo api
 const getAllPhoto = () => {
   return axios.get('photo')
@@ -32,6 +36,7 @@ const uploadPhoto = (body) => {
 export {
   register,
   getUser,
+  editUser,
   getAllPhoto,
   getPhotoByUserId,
   editPhotoDescription,

@@ -5,6 +5,8 @@ import Login from '../page/Login.vue'
 import Register from '../page/Register.vue'
 import Feed from '../page/Feed.vue'
 import Profile from '../page/Profile.vue'
+import EditProfile from '../page/EditProfile.vue'
+
 
 Vue.use(VueRouter);
 
@@ -24,6 +26,10 @@ const routes = [
   {
     path: '/profile/:id',
     component: Profile
+  },
+  {
+    path: '/edit/:id',
+    component: EditProfile,
   }
 ]
 
