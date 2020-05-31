@@ -1,6 +1,6 @@
 <template>
   <div class="profile-image-container" :style="{ width: size, height: size, 'border-radius': size}">
-    <div v-if="image">
+    <div v-if="image" class="profile-image">
       <img :src="image" class="profile-image" />
     </div>
     <img src="https://cdn.onlinewebfonts.com/svg/img_568656.png" class="profile-image" v-else/>
@@ -32,5 +32,6 @@ export default {
 }
 .profile-image {
   width: 100%;
+  height: 100%;
 }
 </style>

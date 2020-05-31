@@ -3,8 +3,12 @@
     <form class="register-form" @submit.prevent="onClickRegister">
       <div class="form-group image-form">
         <div class="input-picture-container">
-          <label class="input-label">Choose Image</label>
-          <input class="input-picture" accept="image/*" type="file" @change="onInputDisplayImage"/>
+          <label class="input-label" v-if="!displayImage && !isLoading">Choose Image</label>
+          <input class="input-picture" accept="image/*" type="file" @change="onInputDisplayImage" v-if="!displayImage && !isLoading"/>
+          <div class="spinner-border text-secondary" role="status" v-if="isLoading">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <img class="preview-image" :src="displayImage" v-if="displayImage && !isLoading"/>
         </div>
       </div>
       <div class="form-group">
@@ -35,6 +39,7 @@ export default {
       password: '',
       displayName: '',
       displayImage: null,
+      isLoading: false,
     }
   },
   methods: {
@@ -55,11 +60,25 @@ export default {
         console.log(error)
       }
     },
-    onInputDisplayImage(e) {
-      const files = e.target.files || e.dataTransfer.files;
-      if (!files.length)
-        return;
-    }
+    async onInputDisplayImage(e) {
+      const files = e.target.files[0]      
+      if(!files) return;
+      await this.uploadPhotoToFirebase(files)
+    },
+    uploadPhotoToFirebase(file) {
+      const ref = firebase.storage().ref().child(file.name)
+      try {
+        this.isLoading = true;
+        ref.put(file).then(snapshot => {
+          snapshot.ref.getDownloadURL().then(url => {
+            this.displayImage = url
+            this.isLoading = false
+          })
+        })
+      } catch(error) {
+        console.log(error);
+      }
+    },
   }
 }
 </script>
@@ -101,5 +120,9 @@ export default {
     width: 100%;
     height: 100%;
     opacity: 0;
+  }
+  .preview-image {
+    width: 100%;
+    height: 100%;
   }
 </style>

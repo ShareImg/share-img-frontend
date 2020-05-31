@@ -10,9 +10,12 @@
           </button>
         </div>
         <div class="input-picture-container">
-          <div class="helper-text" v-if="!photo">Click this box to upload photo</div>
-          <input class="input-picture" accept="image/*" type="file" @change="onInputDisplayImage" v-if="!photo"/>
-          <img :src="photo" class="preview-image" v-else/>
+          <div class="helper-text" v-if="!photo && !isLoading">Click this box to upload photo</div>
+          <div class="spinner-border text-secondary" role="status" style="width: 3rem; height: 3rem;" v-if="isLoading">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <input class="input-picture" accept="image/*" type="file" @change="onInputDisplayImage" v-if="!photo && !isLoading"/>
+          <img :src="photo" class="preview-image" v-if="photo"/>
         </div>
         <div>
           <p class="font-weight-bold">Description *</p>
@@ -29,6 +32,7 @@
 </template>
 
 <script>
+import firebase from '../config/firebase'
 import { deletePhoto, editPhotoDescription, uploadPhoto } from '../api' 
 
 export default {
@@ -38,6 +42,7 @@ export default {
       photo: null,
       description: '',
       isEdit: false,
+      isLoading: false,
     }
   },
   created() {
@@ -48,11 +53,24 @@ export default {
     }
   },
   methods: {
-    onInputDisplayImage(e) {
+    async onInputDisplayImage(e) {
       const files = e.target.files[0]
-      this.photo = URL.createObjectURL(files);
-      if (!files.length)
-        return;
+      if(!files) return;
+      await this.uploadPhotoToFirebase(files)
+    },
+    uploadPhotoToFirebase(file) {
+      const ref = firebase.storage().ref().child(file.name)
+      try {
+        this.isLoading = true;
+        ref.put(file).then(snapshot => {
+          snapshot.ref.getDownloadURL().then(url => {
+            this.photo = url
+            this.isLoading = false
+          })
+        })
+      } catch(error) {
+        console.log(error);
+      }
     },
     onClickReset() {
       this.photo = null;
@@ -68,7 +86,6 @@ export default {
     },
     async onClickSubmit() {
       if (this.isEdit) {
-        if (!this.value.ownerId !== this.user.id) this.onClose();
         const body = {
           ...this.value,
           description: this.description
@@ -80,8 +97,7 @@ export default {
         const body = {
           url: this.photo,
           description: this.description,
-          ownerName: this.user.displayName,
-          ownerId: this.user.ownerId
+          ownerId: this.user.id
         }
         await uploadPhoto(body);
         this.$router.go()

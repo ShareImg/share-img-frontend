@@ -71,6 +71,7 @@ export default {
   methods: {
     handleModal(){
       this.modal = !this.modal;      
+      console.log(this.modal);
     },
     async getUserById() {
       const response = await getUser(this.$route.params.id)
